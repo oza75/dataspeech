@@ -204,6 +204,7 @@ if __name__ == "__main__":
             bin_edges_dict = json.load(json_file)
 
     speaker_level_pitch_bins = text_bins_dict.get("speaker_level_pitch_bins", SPEAKER_LEVEL_PITCH_BINS)
+    print(speaker_level_pitch_bins)
     speaker_rate_bins = text_bins_dict.get("speaker_rate_bins", SPEAKER_RATE_BINS)
     snr_bins = text_bins_dict.get("snr_bins", SNR_BINS)
     reverberation_bins = text_bins_dict.get("reverberation_bins", REVERBERATION_BINS)
@@ -263,11 +264,13 @@ if __name__ == "__main__":
     if args.plot_directory:
         Path(args.plot_directory).mkdir(parents=True, exist_ok=True)
     
+    print("avoid_pitch_computation", args.avoid_pitch_computation)
+    
     if not args.avoid_pitch_computation:
         bin_edges = None
         if "pitch_bins_male" in bin_edges_dict and "pitch_bins_female" in bin_edges_dict:
             bin_edges = {"male": bin_edges_dict["pitch_bins_male"], "female": bin_edges_dict["pitch_bins_female"]}
-
+        print("bin_edges", bin_edges)
         dataset, pitch_bin_edges = speaker_level_relative_to_gender(dataset, speaker_level_pitch_bins, args.speaker_id_column_name, args.gender_column_name, "utterance_pitch_mean", "pitch", batch_size=args.batch_size, num_workers=args.cpu_num_workers, std_tolerance=args.pitch_std_tolerance, save_dir=args.plot_directory, only_save_plot=args.only_save_plot, bin_edges=bin_edges)
 
     dataset, speaking_rate_bin_edges = bins_to_text(dataset, speaker_rate_bins, "speaking_rate", "speaking_rate", batch_size=args.batch_size, num_workers=args.cpu_num_workers, leading_split_for_bins=args.leading_split_for_bins, std_tolerance=args.speaking_rate_std_tolerance, save_dir=args.plot_directory, only_save_plot=args.only_save_plot, bin_edges=bin_edges_dict.get("speaking_rate",None), lower_range=args.speaking_rate_lower_range)

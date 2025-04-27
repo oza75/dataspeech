@@ -51,6 +51,8 @@ if __name__ == "__main__":
             remove_columns=[audio_column_name], # tricks to avoid rewritting audio
             fn_kwargs={"audio_column_name": audio_column_name,},
         )
+    
+    dataset = dataset.rename_column("si_sdr", "si-sdr").rename_column("duration", "speech_duration")
 
     print("Compute pitch")
     pitch_dataset = dataset.cast_column(audio_column_name, Audio(sampling_rate=16_000)).map(

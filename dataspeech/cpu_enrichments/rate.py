@@ -1,6 +1,6 @@
 from g2p import make_g2p
 
-transducer = make_g2p('eng', 'eng-ipa')
+transducer = make_g2p('fra', 'fra-ipa')
 
 def rate_apply(batch, rank=None, audio_column_name="audio", text_column_name="text"):
     if isinstance(batch[text_column_name], list):  

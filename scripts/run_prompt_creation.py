@@ -470,6 +470,9 @@ def main():
                 token=model_args.token,
                 num_proc=data_args.preprocessing_num_workers,
             )
+    
+    for split in raw_datasets:
+        raw_datasets[split] = raw_datasets[split].remove_columns(["speaker_embeddings"])
 
     raw_datasets_features = set(raw_datasets[next(iter(raw_datasets))].features.keys())
 
@@ -563,7 +566,7 @@ def main():
         elif is_new_speaker_prompt:
             sample_prompt = NEW_PROMPT
         for key in EXPECTED_COLUMNS:
-            sample_prompt = sample_prompt.replace(f"[{key}]", sample[key])
+            sample_prompt = sample_prompt.replace(f"[{key}]", str(sample[key]))
         if accent_column_name is not None and sample.get(accent_column_name, "Unindentified") != "Unindentified":
             sample_prompt = sample_prompt.replace("[accent]", sample["accent"])
             
